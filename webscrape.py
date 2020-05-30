@@ -39,5 +39,22 @@ for resultRow in resultsRow:
                 item = item.next_sibling
 
                 details[og.text] = children
+                
+        # finding the number of reviews and percentage that are positive
+        ratings = gsoup.find_all("span", class_ = "nonresponsive_hidden responsive_reviewdesc")
+        if len(ratings) > 0:
+            rating_percentage = ratings[-1].get_text().strip().split(" ")[1]
+        else:
+            rating_percentage = "No Rating"
+        
+        num_ratings = gsoup.find("meta", {"itemprop": "reviewCount"})
+        if num_ratings != None:
+            num_ratings = int(num_ratings.get("content"))
+        else:
+            num_ratings = 0
+            
+        details["Number of Ratings"] = num_ratings
+        details["Percentage of Positive Reviews"] = rating_percentage
+        
         print(details)
     break
